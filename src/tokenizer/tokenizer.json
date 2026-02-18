@@ -50,7 +50,7 @@
     },
     {
       "id": 31102,
-      "content": "🤔",
+      "content": "🛋",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -59,7 +59,7 @@
     },
     {
       "id": 31103,
-      "content": "🇺",
+      "content": "👏",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -68,7 +68,7 @@
     },
     {
       "id": 31104,
-      "content": "✨",
+      "content": "🤧",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -77,7 +77,7 @@
     },
     {
       "id": 31105,
-      "content": "🇮",
+      "content": "🔥",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -86,7 +86,7 @@
     },
     {
       "id": 31106,
-      "content": "😢",
+      "content": "😉",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -95,7 +95,7 @@
     },
     {
       "id": 31107,
-      "content": "😔",
+      "content": "🟢",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -104,7 +104,7 @@
     },
     {
       "id": 31108,
-      "content": "🤗",
+      "content": "🤭",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -113,7 +113,7 @@
     },
     {
       "id": 31109,
-      "content": "🦰",
+      "content": "💸",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -122,7 +122,7 @@
     },
     {
       "id": 31110,
-      "content": "😄",
+      "content": "😘",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -131,7 +131,7 @@
     },
     {
       "id": 31111,
-      "content": "💖",
+      "content": "🥱",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -140,7 +140,7 @@
     },
     {
       "id": 31112,
-      "content": "👑",
+      "content": "🤡",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -149,7 +149,7 @@
     },
     {
       "id": 31113,
-      "content": "💩",
+      "content": "🥹",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -158,7 +158,7 @@
     },
     {
       "id": 31114,
-      "content": "😓",
+      "content": "🤟",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -167,7 +167,7 @@
     },
     {
       "id": 31115,
-      "content": "💃",
+      "content": "😠",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -176,7 +176,7 @@
     },
     {
       "id": 31116,
-      "content": "👍",
+      "content": "🤣",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -194,7 +194,7 @@
     },
     {
       "id": 31118,
-      "content": "🤧",
+      "content": "🤗",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -203,15 +203,6 @@
     },
     {
       "id": 31119,
-      "content": "➡",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31120,
       "content": "❌",
       "single_word": false,
       "lstrip": false,
@@ -220,592 +211,7 @@
       "special": false
     },
     {
-      "id": 31121,
-      "content": "🇸",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31122,
-      "content": "🍼",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31123,
-      "content": "👛",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31124,
-      "content": "🥳",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31125,
-      "content": "🤨",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31126,
-      "content": "🟢",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31127,
-      "content": "😳",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31128,
-      "content": "🤣",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31129,
-      "content": "🏻",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31130,
-      "content": "😠",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31131,
-      "content": "😌",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31132,
-      "content": "🤮",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31133,
-      "content": "💙",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31134,
-      "content": "💋",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31135,
-      "content": "✔",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31136,
-      "content": "🙏",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31137,
-      "content": "🌹",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31138,
-      "content": "😘",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31139,
-      "content": "🗽",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31140,
-      "content": "👹",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31141,
-      "content": "🚗",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31142,
-      "content": "😅",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31143,
-      "content": "💪",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31144,
-      "content": "😉",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31145,
-      "content": "🎀",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31146,
-      "content": "😍",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31147,
-      "content": "😂",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31148,
-      "content": "💨",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31149,
-      "content": "🔥",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31150,
-      "content": "🫰",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31151,
-      "content": "🥰",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31152,
-      "content": "🛋",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31153,
-      "content": "ì",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31154,
-      "content": "ù",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31155,
-      "content": "🥱",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31156,
-      "content": "❤",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31157,
-      "content": "️",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31158,
-      "content": "😁",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31159,
-      "content": "🙄",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31160,
-      "content": "🥹",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31161,
-      "content": "👇",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31162,
-      "content": "🙌",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31163,
-      "content": "🎾",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31164,
-      "content": "ò",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31165,
-      "content": "🩷",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31166,
-      "content": "🥂",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31167,
-      "content": "👏",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31168,
-      "content": "🤭",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31169,
-      "content": "👱",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31170,
-      "content": "🏎",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31171,
-      "content": "🥲",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31172,
-      "content": "🔴",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31173,
-      "content": "🤦",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31174,
-      "content": "💸",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31175,
-      "content": "❗",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31176,
-      "content": "🤫",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31177,
-      "content": "😆",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31178,
-      "content": "🍝",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31179,
-      "content": "🍿",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31180,
-      "content": "🤬",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31181,
-      "content": "👩",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31182,
-      "content": "🍌",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31183,
-      "content": "😝",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31184,
-      "content": "😭",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31185,
-      "content": "🤡",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31186,
+      "id": 31120,
       "content": "😇",
       "single_word": false,
       "lstrip": false,
@@ -814,8 +220,8 @@
       "special": false
     },
     {
-      "id": 31187,
-      "content": "🧵",
+      "id": 31121,
+      "content": "💪",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -823,8 +229,8 @@
       "special": false
     },
     {
-      "id": 31188,
-      "content": "🤷",
+      "id": 31122,
+      "content": "😭",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -832,8 +238,8 @@
       "special": false
     },
     {
-      "id": 31189,
-      "content": "🤟",
+      "id": 31123,
+      "content": "♀",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -841,34 +247,7 @@
       "special": false
     },
     {
-      "id": 31190,
-      "content": "🙈",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31191,
-      "content": "🇹",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31192,
-      "content": "😱",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31193,
+      "id": 31124,
       "content": "🐅",
       "single_word": false,
       "lstrip": false,
@@ -877,8 +256,629 @@
       "special": false
     },
     {
-      "id": 31194,
+      "id": 31125,
+      "content": "🤬",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31126,
+      "content": "🗽",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31127,
+      "content": "🎾",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31128,
+      "content": "💃",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31129,
+      "content": "🤔",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31130,
+      "content": "🩷",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31131,
+      "content": "👇",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31132,
+      "content": "🙄",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31133,
+      "content": "😂",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31134,
+      "content": "❤",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31135,
+      "content": "😌",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31136,
+      "content": "🍝",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31137,
+      "content": "🤨",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31138,
+      "content": "🏎",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31139,
+      "content": "🎀",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31140,
+      "content": "🤦",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31141,
+      "content": "❗",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31142,
+      "content": "💩",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31143,
+      "content": "💋",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31144,
+      "content": "👹",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31145,
+      "content": "🥂",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31146,
+      "content": "😝",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31147,
+      "content": "♂",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31148,
+      "content": "⚪",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31149,
+      "content": "🔴",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31150,
+      "content": "🦰",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31151,
+      "content": "😄",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31152,
+      "content": "🌹",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31153,
+      "content": "👱",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31154,
+      "content": "😁",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31155,
+      "content": "ù",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31156,
+      "content": "🍿",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31157,
+      "content": "✔",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31158,
+      "content": "🤮",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31159,
+      "content": "😱",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31160,
+      "content": "🙌",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31161,
+      "content": "‼",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31162,
+      "content": "😮",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31163,
+      "content": "😳",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31164,
+      "content": "🧵",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31165,
+      "content": "😩",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31166,
+      "content": "🥰",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31167,
+      "content": "🍼",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31168,
+      "content": "🙏",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31169,
+      "content": "🥳",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31170,
+      "content": "➡",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31171,
+      "content": "ì",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31172,
+      "content": "💙",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31173,
+      "content": "👩",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31174,
+      "content": "👍",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31175,
+      "content": "🤫",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31176,
+      "content": "🍌",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31177,
+      "content": "🤷",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31178,
+      "content": "💖",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31179,
+      "content": "👑",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31180,
+      "content": "🚗",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31181,
+      "content": "👛",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31182,
+      "content": "🥲",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31183,
+      "content": "😔",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31184,
+      "content": "✨",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31185,
+      "content": "😓",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31186,
+      "content": "😢",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31187,
       "content": "😡",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31188,
+      "content": "🫰",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31189,
+      "content": "💨",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31190,
+      "content": "😆",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31191,
+      "content": "😍",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31192,
+      "content": "🏻",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31193,
+      "content": "😅",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": true,
+      "special": false
+    },
+    {
+      "id": 31194,
+      "content": "ò",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
@@ -896,16 +896,7 @@
     },
     {
       "id": 31196,
-      "content": "😮",
-      "single_word": false,
-      "lstrip": false,
-      "rstrip": false,
-      "normalized": true,
-      "special": false
-    },
-    {
-      "id": 31197,
-      "content": "😩",
+      "content": "🙈",
       "single_word": false,
       "lstrip": false,
       "rstrip": false,
