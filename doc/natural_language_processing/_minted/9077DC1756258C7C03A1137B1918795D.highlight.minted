@@ -1,0 +1,42 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from}\PYG{+w}{ }\PYG{n+nn}{collections}\PYG{+w}{ }\PYG{k+kn}{import} \PYG{n}{Counter}
+
+\PYG{c+c1}{\PYGZsh{} Corpus di esempio: parole separate da spazi e simbolo \PYGZus{} per il fine\PYGZhy{}parola}
+\PYG{n}{corpus} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}low \PYGZus{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}lower \PYGZus{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}newest \PYGZus{}\PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}widest \PYGZus{}\PYGZdq{}}\PYG{p}{]}
+\PYG{c+c1}{\PYGZsh{} Rappresentiamo ogni parola come lista di caratteri (o subword iniziali)}
+\PYG{n}{words} \PYG{o}{=} \PYG{p}{[}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{w}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{} \PYGZdq{}}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZdq{}}\PYG{p}{))} \PYG{k}{for} \PYG{n}{w} \PYG{o+ow}{in} \PYG{n}{corpus}\PYG{p}{]}
+\PYG{c+c1}{\PYGZsh{} Esempio: \PYGZdq{}lowest \PYGZus{}\PYGZdq{} \PYGZhy{}\PYGZgt{} [\PYGZdq{}l\PYGZdq{},\PYGZdq{}o\PYGZdq{},\PYGZdq{}w\PYGZdq{},\PYGZdq{}e\PYGZdq{},\PYGZdq{}s\PYGZdq{},\PYGZdq{}t\PYGZdq{},\PYGZdq{}\PYGZus{}\PYGZdq{}]}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{get\PYGZus{}stats}\PYG{p}{(}\PYG{n}{words}\PYG{p}{):}
+    \PYG{n}{pairs} \PYG{o}{=} \PYG{n}{Counter}\PYG{p}{()}
+    \PYG{k}{for} \PYG{n}{w} \PYG{o+ow}{in} \PYG{n}{words}\PYG{p}{:}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{w}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{n}{pairs}\PYG{p}{[(}\PYG{n}{w}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{w}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{])]} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{k}{return} \PYG{n}{pairs}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{merge\PYGZus{}pair}\PYG{p}{(}\PYG{n}{words}\PYG{p}{,} \PYG{n}{pair}\PYG{p}{):}
+    \PYG{n}{a}\PYG{p}{,} \PYG{n}{b} \PYG{o}{=} \PYG{n}{pair}
+    \PYG{n}{merged} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{w} \PYG{o+ow}{in} \PYG{n}{words}\PYG{p}{:}
+        \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{n}{new\PYGZus{}w} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{while} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{w}\PYG{p}{):}
+            \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{w}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{o+ow}{and} \PYG{n}{w}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{==} \PYG{n}{a} \PYG{o+ow}{and} \PYG{n}{w}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{==} \PYG{n}{b}\PYG{p}{:}
+                \PYG{n}{new\PYGZus{}w}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{a}\PYG{o}{+}\PYG{n}{b}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} fusione}
+                \PYG{n}{i} \PYG{o}{+=} \PYG{l+m+mi}{2}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{new\PYGZus{}w}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+                \PYG{n}{i} \PYG{o}{+=} \PYG{l+m+mi}{1}
+        \PYG{n}{merged}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{new\PYGZus{}w}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{merged}
+
+\PYG{c+c1}{\PYGZsh{} Applichiamo poche fusioni}
+\PYG{k}{for} \PYG{n}{\PYGZus{}} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{):}
+    \PYG{n}{stats} \PYG{o}{=} \PYG{n}{get\PYGZus{}stats}\PYG{p}{(}\PYG{n}{words}\PYG{p}{)}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{stats}\PYG{p}{:}
+        \PYG{k}{break}
+    \PYG{n}{best} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{stats}\PYG{p}{,} \PYG{n}{key}\PYG{o}{=}\PYG{n}{stats}\PYG{o}{.}\PYG{n}{get}\PYG{p}{)}
+    \PYG{n}{words} \PYG{o}{=} \PYG{n}{merge\PYGZus{}pair}\PYG{p}{(}\PYG{n}{words}\PYG{p}{,} \PYG{n}{best}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Vocabolario subword appreso:\PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{sorted}\PYG{p}{(\PYGZob{}}\PYG{n}{s} \PYG{k}{for} \PYG{n}{w} \PYG{o+ow}{in} \PYG{n}{words} \PYG{k}{for} \PYG{n}{s} \PYG{o+ow}{in} \PYG{n}{w}\PYG{p}{\PYGZcb{}))}
+\end{MintedVerbatim}

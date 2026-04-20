@@ -1,0 +1,366 @@
+
+\blank
+\newpage
+
+\section{N-Grams Language Model}
+
+    Un \textbf{language model} assegna probabilità a una sequenza di parole $W=w_{1:N}$ e consente di prevedere la prossima parola $P(w_i\mid w_{1:i-1})$. Usando la regola della catena, la probabilità congiunta si scompone come
+    
+    $$
+    P(w_{1:N}) \;=\; \prod_{i=1}^{N} P\big(w_i \mid w_{1:i-1}\big).
+    $$
+    
+    Poiché stimare $P(w_i\mid w_{1:i-1})$ con tutto il contesto è impraticabile, adottiamo l'assunzione di Markov: ogni parola dipende solo dalle ultime $k$ parole. Un modello a $n$-grammi con $n=k+1$ approssima
+    
+    $$
+    P(w_{1:N}) \;\approx\; \prod_{i=1}^{N} P\big(w_i \mid w_{i-k:i-1}\big),
+    $$
+    
+    con i casi notevoli di unigram ($k=0$), bigram ($k=1$) e trigram ($k=2$).
+    
+    Per i bigrammi, la stima di \textbf{massima verosimiglianza} (\textbf{MLE}) è
+    
+    $$
+    \hat P_{\text{MLE}}(w_i\mid w_{i-1}) \;=\; \frac{c(w_{i-1},w_i)}{c(w_{i-1})},
+    $$
+    
+    mentre per i trigrammi è 
+    
+    $$\hat P(w_i\mid w_{i-2},w_{i-1}) = \tfrac{c(w_{i-2},w_{i-1},w_i)}{c(w_{i-2},w_{i-1})}$$
+    
+    In pratica si includono \textbf{token di inizio/fine} frase $\langle s\rangle,\langle/ s\rangle$ e si lavora in log-spazio: 
+    
+    $$\log P(w_{1:N}) = \sum_i \log P(\cdot)$$
+
+    Possiamo estendere il modello ai trigrammi, ai 4-grammi, ai 5-grammi.\\
+    In generale, i modelli di linguaggio bigrammi sono insufficienti, perché \textbf{il linguaggio ha dipendenze a lunga distanza}:
+    \textit{"Il computer che avevo appena messo nella sala macchine
+    al quinto piano si è bloccato"}.\\
+    Ma spesso possiamo cavarcela con modelli a N-grammi. 
+    
+    \paragraph{Ex.\\}
+    Supponiamo un corpus in cui abbiamo i conteggi: $c(\langle s\rangle,\text\{Io\})=10$, $c(\text\{Io, studio\})=8$, $c(\text\{studio, NLP\})=5$, $c(\text\{NLP, \langle/ s\rangle\})=5$, e i conteggi di contesto $c(\langle s\rangle)=100$, $c(\text\{Io\})=50$, $c(\text\{studio\})=20$, $c(\text\{NLP\})=5$. La probabilità della frase $\langle s\rangle$ Io studio NLP $\langle/ s\rangle$ secondo il modello bigram è
+    
+    $$
+    P \approx \hat P(\text{Io}\mid \langle s\rangle) \cdot \hat P(\text{studio}\mid \text{Io}) \cdot \hat P(\text{NLP}\mid \text{studio}) \cdot \hat P(\langle/ s\rangle \mid \text{NLP}) \;=\; \frac{10}{100} \cdot \frac{8}{50} \cdot \frac{5}{20} \cdot \frac{5}{5}.
+    $$
+    
+    Basta uno zero in uno dei fattori per annullare l'intera probabilità: questo motiva lo \textit{smoothing} e la gestione esplicita degli OOV con $\langle\,UNK\,\rangle$.
+
+    \newpage
+
+    \subsection{Evaluation and Perplexity}
+    
+        La \textbf{valutazione} di un language model a $n$-grammi si basa sulla probabilità assegnata a un corpus di test tenuto fuori dall’addestramento. La quantità centrale è la \textit{log-likelihood} media per token, ovvero la \textit{cross-entropy} empirica, da cui discende la \textit{perplexity}.
+        
+        Dato un test $W=w_{1:N}$ e un modello $P$, definiamo la \textbf{log-verosimiglianza media} per token come
+        
+        $$
+        \bar{\ell}(W;P) \;=\; \frac{1}{N} \sum_{i=1}^{N} \log P\!\big(w_i \mid w_{1:i-1}\big).
+        $$
+        
+        La \textbf{cross-entropy} (in nat/token) è $H(W;P) = -\bar{\ell}(W;P)$ e misura la sorpresa media del modello; in bit/token vale $H_2(W;P)=H(W;P)/\log 2$. La \textbf{perplexity} è l’esponenziale della cross-entropy:
+        
+        $$
+        \mathrm{PP}(W;P) \;=\; \exp\!\big( H(W;P) \big) \;=\; \exp\!\Big( -\tfrac{1}{N} \sum_{i=1}^{N} \log P(w_i \mid w_{1:i-1}) \Big).
+        $$
+        
+        Valori più bassi di $H$ e di $\mathrm{PP}$ indicano un modello migliore, a parità di test e pre-processing.\\
+        
+        La probabilità di una frase $s$ è $P(s)=\prod_j P(w_j\mid w_{1:j-1})$; per confrontare frasi di lunghezze diverse si usa sempre la normalizzazione per token. Su un test di $M$ frasi con lunghezze $N_1,\dots,N_M$ si riporta una sola metrica a livello corpus sommando i log e dividendo per $N=\sum_m N_m$.\\
+
+        \textbf{Minimizzare la perplessità equivale a massimizzare la probabilità.}\\
+        
+        La perplexity dipende da: (i) token speciali di inizio/fine frase $\langle s\rangle,\langle/ s\rangle$ (coerenza tra training e test), (ii) gestione degli OOV con $\langle\,UNK\,\rangle$ (\textit{closed vocabulary}: tutte le parole non viste vanno mappate a $\langle\,UNK\,\rangle$ anche nel test), (iii) smoothing: senza smoothing, un singolo fattore nullo rende $\mathrm{PP}=+\infty$. Si lavora in log-spazio per stabilità: $\log P(w_{1:N}) = \sum_i \log P(\cdot)$.
+        
+        \paragraph{Ex.\\}
+        Su una frase di $N=4$ token, con probabilità condizionate $0.20, 0.40, 0.50, 0.25$, la log-likelihood media è $\bar{\ell}=\tfrac{1}{4}(\log 0.20+\log 0.40+\log 0.50+\log 0.25)$, la cross-entropy $H=-\bar{\ell}$ e la perplexity
+        \[
+        \mathrm{PP} = \exp(-\bar{\ell}) = \exp\!\Big( -\tfrac{1}{4}(\log 0.20+\log 0.40+\log 0.50+\log 0.25) \Big) \approx 2.51.
+        \]
+        In base 2 si riporta $H_2=H/\log 2$ (bit/token) e $\mathrm{PP}_2=2^{H_2}$.\\
+        
+        \paragraph{Confronto tra modelli e significatività}
+        Con due LM $P$ e $Q$ addestrati sullo stesso training, la differenza di cross-entropy sul test è
+        
+        $$
+        \Delta H \;=\; H(W;P) - H(W;Q) \;=\; -\frac{1}{N} \sum_{i=1}^{N} \big( \log P(w_i\mid\cdot) - \log Q(w_i\mid\cdot) \big),
+        $$
+        
+        ossia (a segno) la differenza di log-likelihood media. Per evitare falsi positivi, si usano test a ri-campionamento (bootstrap o test appaiato per frase) e si riportano intervalli su $\Delta H$.
+        
+        \paragraph{Pitfall frequenti.}
+        La PP non è confrontabile tra tokenizzazioni diverse o con policy di OOV diverse; cambiare $N$ o l’uso di $\langle\,UNK\,\rangle$ altera i valori. Il mismatch di dominio gonfia $H$ indipendentemente dalla bontà del modello. Inoltre, PP bassa non garantisce miglioramento su task a valle: va sempre verificato l’effetto su metriche applicative.
+
+    \subsection{Generalization and Zeros}
+    
+        Un modello a $n$-grammi stimato con massima verosimiglianza generalizza bene solo se le probabilità apprese non si limitano a riprodurre i conteggi del training (più è alto il numero di $n$-gram più si adatta specificatamente al testo) ma assegnano massa anche a sequenze plausibili mai osservate. Con MLE, per un bigram vale
+        
+        $$
+        \hat P_{\text{MLE}}(w_i\mid w_{i-1}) = \frac{c(w_{i-1},w_i)}{c(w_{i-1})}
+        $$
+        
+        per cui ogni $n$-gram mai visto ha probabilità $0$. In una frase $w_{1:N}$ basta un solo fattore nullo per annullare l’intera $P(w_{1:N})$, facendo esplodere la perplexity: se \;$P(w_j\mid\cdot)=0$\; allora
+        
+        $$
+        \log P(w_{1:N}) = \sum_{i=1}^{N}\log P(w_i\mid\cdot) = -\infty,\quad \mathrm{PP}(W)=\exp\!\Big(-\tfrac{1}{N}\sum_i \log P\Big)=+\infty
+        $$
+        
+        Questo è il \textit{problema degli zeri}: uno stimatore perfetto sul training (\textbf{overfitting}) può essere pessimo sul test.\\
+
+        Gli $n$-grammi crescono esponenzialmente con $n$ e con $|V|$; anche con corpora estesi, lo spazio dei contesti è in gran parte inesplorato. Il modello MLE assegna tutta la massa agli eventi visti e nessuna a quelli non visti, violando il principio di \textit{regolarità} richiesto dalla generalizzazione. Dal punto di vista informativo, minimizzare l’errore sul training non implica minimizzare l’\textit{errore di generalizzazione} $H(W_{\text{test}};P)$.\\        
+        
+        Per evitare zeri dovuti a parole sconosciute, si adotta una valutazione a \textbf{vocabolario chiuso}: si definisce un set $V$ sul training e si mappano le forme rare/non viste in un token speciale $\langle\,UNK\,\rangle$. Durante l’addestramento si sostituiscono nel training tutte le parole con frequenza $<\tau$ con $\langle\,UNK\,\rangle$, così il modello apprende probabilità per $\langle\,UNK\,\rangle$. In test, ogni parola fuori da $V$ viene mappata a $\langle\,UNK\,\rangle$ prima del calcolo di $P(w_i\mid\cdot)$.
+        
+        
+        \paragraph{Dalla frequenza alla predizione: riservare massa agli eventi non visti}
+        L’idea chiave per generalizzare è \textit{spostare} parte della probabilità dagli eventi frequenti verso la coda, così che gli eventi non visti ricevano massa non nulla. Un esempio formale (che svilupperemo nelle sezioni sullo smoothing) è la famiglia di stimatori che modificano i conteggi $c$ in conteggi "effettivi" $c^{\ast}$ e poi applicano MLE:
+
+        $$
+        \tilde P(w_i\mid h) \;=\; \frac{c^{\ast}(h,w_i)}{\sum_{w'} c^{\ast}(h,w')},\qquad h=w_{i-n+1:i-1}
+        $$
+        
+        Con questo schema, anche quando $c(h,w)=0$ possiamo avere $c^{\ast}(h,w)>0$ grazie alla redistribuzione di massa.
+        
+        
+        \paragraph{Good--Turing (intuizione)}
+        Una strategia classica stima la \textit{riserva} di probabilità per gli eventi non visti a partire dalla frequenza degli eventi rari. Se $N_c$ è il numero di $n$-gram che compaiono esattamente $c$ volte nel training, l’idea di Good--Turing rimpiazza (per $c>0$) il conteggio con
+        
+        $$
+        \;c^{\ast} \;=\; \frac{(c+1)\,N_{c+1}}{N_c},\qquad\text{e assegna agli eventi mai visti ($c=0$) una massa }\; p_0 = \frac{N_1}{N_{\!\text{tot}}}
+        $$
+        
+        con normalizzazione opportuna. In pratica si usa spesso in combinazione con backoff/interpolazione. (I dettagli e le correzioni di stima saranno trattati nello smoothing.)
+        
+        \newpage
+
+    \subsection{Smoothing: Add-one (Laplace) smoothing}
+        Lo \textbf{smoothing} evita probabilità nulle per $n$-grammi mai osservati e migliora la capacità di generalizzazione. La forma più semplice è l'\textbf{add-one (Laplace)}, che aggiunge una pseudo–occorrenza a ogni possibile continuazione del contesto.\\
+        
+        Dato un contesto (\textit{history}) $h=w_{i-n+1:i-1}$, il modello MLE assegna
+        
+        $$
+        \hat P_{\text{MLE}}(w\mid h) \,=\, \frac{c(h,w)}{c(h)}, \qquad c(h)=\sum_{w'} c(h,w')
+        $$
+        
+        Con Laplace, sommiamo $1$ al conteggio di ogni parola del vocabolario $V$ (\textit{closed vocabulary} che include anche $\langle\,UNK\,\rangle$) e normalizziamo:
+        
+        $$
+        \tilde P_{\text{Lap}}(w\mid h) \,=\, \frac{c(h,w)+1}{\,c(h)+|V|\,}
+        $$
+        
+        La normalizzazione è garantita perché $\sum_w (c(h,w)+1)=c(h)+|V|$.\\
+        
+        Con una visione bayesiana, l'add-one è un caso particolare della famiglia di \textbf{Lidstone} che usa un \textit{prior} \textbf{Dirichlet} \textit{simmetrico} con parametro $\alpha>0$. La previsione \textit{posterior predictive} è
+        
+        $$
+        \tilde P_{\alpha}(w\mid h) \,=\, \frac{c(h,w)+\alpha}{\,c(h)+\alpha|V|\,},\qquad \alpha=1\ \Rightarrow\ \text{Laplace}
+        $$
+        
+        Questa interpretazione chiarisce che lo smoothing equivale ad aggiungere $\alpha$ pseudo–conteggi a \textit{tutte} le uscite possibili dal contesto, prima di normalizzare.
+        
+        
+        \paragraph{Ex.\\}
+        Supponiamo un bigram LM con contesto il corpus del Berkeley Restaurant
+
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+                \hline
+                 & \textbf{i} & \textbf{want} & \textbf{to} & \textbf{eat} & \textbf{chinese} & \textbf{food} & \textbf{lunch} & \textbf{spend} \\ 
+                 \hline
+                \textbf{i} & 6 & 828 & {\color{blue}1} & 10 & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & 3 \\ 
+                \textbf{want} & 3 & {\color{blue}1} & 609 & 2 & 7 & 7 & 6 & 2 \\ 
+                \textbf{to} & 3 & {\color{blue}1} & 5 & 687 & 3 & {\color{blue}1} & 7 & 212 \\ 
+                \textbf{eat} & {\color{blue}1} & {\color{blue}1} & 3 & {\color{blue}1} & 17 & 3 & 43 & {\color{blue}1} \\ 
+                \textbf{chinese} & 2 & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & 83 & 2 & {\color{blue}1} & {\color{blue}1} \\ 
+                \textbf{food} & 16 & {\color{blue}1} & 16 & {\color{blue}1} & 2 & 5 & {\color{blue}1} & {\color{blue}1} \\ 
+                \textbf{lunch} & 3 & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & 2 & {\color{blue}1} & {\color{blue}1} \\ 
+                \textbf{spend} & 2 & {\color{blue}1} & 2 & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} & {\color{blue}1} \\ 
+                \hline
+            \end{tabular}
+        \end{center}
+
+        $$
+        P^*(w_n|w_{n-1}) = \frac{C(w_{n-1}w_n) + 1}{C(w_{n-1}) + V}
+        $$
+
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+                \hline
+                 & \textbf{i} & \textbf{want} & \textbf{to} & \textbf{eat} & \textbf{chinese} & \textbf{food} & \textbf{lunch} & \textbf{spend} \\ \hline
+                \textbf{i} & 0.0015 & 0.21 & {\color{blue}0.00025} & 0.0025 & {\color{blue}0.00025} & {\color{blue}0.00025} & {\color{blue}0.00025} & {\color{blue}0.00075} \\ 
+                \textbf{want} & 0.0013 & {\color{blue}0.00042} & 0.26 & 0.00084 & 0.0029 & {\color{blue}0.00025} & 0.0025 & 0.00084 \\ 
+                \textbf{to} & {\color{blue}0.00078} & {\color{blue}0.00026} & 0.0013 & 0.18 & {\color{blue}0.00078} & {\color{blue}0.00026} & 0.0018 & 0.055 \\ 
+                \textbf{eat} & {\color{blue}0.00046} & {\color{blue}0.00046} & 0.0014 & {\color{blue}0.00046} & 0.0078 & 0.0014 & 0.02 & {\color{blue}0.00046} \\ 
+                \textbf{chinese} & 0.0012 & {\color{blue}0.00062} & {\color{blue}0.00062} & {\color{blue}0.00062} & 0.052 & {\color{blue}0.00062} & 0.0012 & {\color{blue}0.00062} \\ 
+                \textbf{food} & 0.0063 & {\color{blue}0.00039} & 0.0063 & {\color{blue}0.00039} & 0.00079 & 0.002 & {\color{blue}0.00039} & {\color{blue}0.00039} \\ 
+                \textbf{lunch} & 0.0017 & {\color{blue}0.00056} & {\color{blue}0.00056} & {\color{blue}0.00056} & {\color{blue}0.00056} & 0.0011 & {\color{blue}0.00056} & {\color{blue}0.00056} \\ 
+                \textbf{spend} & 0.0012 & {\color{blue}0.00058} & 0.0012 & {\color{blue}0.00058} & {\color{blue}0.00058} & {\color{blue}0.00058} & {\color{blue}0.00058} & {\color{blue}0.00058} \\ \hline
+            \end{tabular}
+        \end{center}
+
+        \[
+        \begin{aligned}
+            c^*(w_{n-1}w_n) &= P^*(w_{n-1}w_n)N \\
+            &= P^*(w_n|w_{n-1})P(w_{n-1})N \\
+            &= P^*(w_n|w_{n-1})C(w_{n-1}) \\
+            &= \frac{[C(w_{n-1}w_n) + 1]C(w_{n-1})}{C(w_{n-1}) + V}
+        \end{aligned}
+        \]
+
+        \begin{center}
+            \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+                \hline
+                 & \textbf{i} & \textbf{want} & \textbf{to} & \textbf{eat} & \textbf{chinese} & \textbf{food} & \textbf{lunch} & \textbf{spend} \\ \hline
+                \textbf{i} & 3.8 & 527 & {\color{blue}0.64} & 6.4 & {\color{blue}0.64} & {\color{blue}0.64} & {\color{blue}0.64} & 1.9 \\ 
+                \textbf{want} & 1.2 & {\color{blue}0.39} & 238 & 0.78 & 2.7 & 2.7 & 2.3 & 0.78 \\ 
+                \textbf{to} & 1.9 & {\color{blue}0.63} & 3.1 & 430 & 1.9 & {\color{blue}0.63} & 4.4 & 133 \\ 
+                \textbf{eat} & {\color{blue}0.34} & {\color{blue}0.34} & 1 & {\color{blue}0.34} & 5.8 & 1 & 15 & {\color{blue}0.34} \\ 
+                \textbf{chinese} & 0.2 & {\color{blue}0.098} & {\color{blue}0.098} & {\color{blue}0.098} & {\color{blue}0.098} & 8.2 & 0.2 & {\color{blue}0.098} \\ 
+                \textbf{food} & 6.9 & {\color{blue}0.43} & 6.9 & {\color{blue}0.43} & 0.86 & 2.2 & {\color{blue}0.43} & {\color{blue}0.43} \\ 
+                \textbf{lunch} & 0.57 & {\color{blue}0.19} & {\color{blue}0.19} & {\color{blue}0.19} & {\color{blue}0.19} & 0.38 & {\color{blue}0.19} & {\color{blue}0.19} \\ 
+                \textbf{spend} & 0.32 & {\color{blue}0.16} & 0.32 & {\color{blue}0.16} & {\color{blue}0.16} & {\color{blue}0.16} & {\color{blue}0.16} & {\color{blue}0.16} \\ \hline
+            \end{tabular}
+        \end{center}
+        
+        Tutte le uscite non viste ricevono massa non nulla e la distribuzione resta normalizzata.\\
+        
+        L'add-one elimina gli zeri e stabilizza la cross-entropy di test $H(W;P)=-\tfrac{1}{N}\sum_i \log \tilde P(w_i\mid h_i)$, evitando $+\infty$ nella perplexity. Tuttavia, tende a \textit{sovrastimare} gli eventi non visti e a \textit{sottostimare} quelli frequenti, soprattutto quando $|V|$ è grande e $c(h)$ è piccolo. \textbf{In pratica questo comporta perplexity peggiori rispetto a metodi più informati}. Un rimedio parziale è usare $\alpha<1$ (Lidstone), ma la stima resta grossolana se paragonata a Kneser--Ney.
+        
+        
+        \paragraph{Nota:}
+        In valutazione a vocabolario chiuso, $|V|$ deve includere $\langle\,UNK\,\rangle$, $\langle s\rangle$ e $\langle/ s\rangle$ se presenti nel training. L'add-one assegna automaticamente probabilità positive anche a $\langle\,UNK\,\rangle$, consentendo di calcolare $P(w_{1:N})=\prod_i \tilde P(w_i\mid h_i)$ senza zeri.
+        
+        
+        \paragraph{Nota:}
+        L'add-one è utile come baseline e come strumento didattico: è semplice da implementare, completamente deterministico e rende trasparente il ruolo di $|V|$ e dei conteggi. Per applicazioni serie su bigrammi/trigrammi è preferibile adottare smoothing con \textit{discount} e backoff/interpolazione (es. Kneser--Ney), ottimizzando i parametri su validation.
+
+    \newpage
+
+    \subsection{Interpolation, Backoff, and Web-Scale LMs}
+    
+        In un LM interpolato combiniamo più modelli (ad es. uni/bi/trigram) con pesi non negativi che sommano a $1$. Per un contesto $h$ e la prossima parola $w$ scriviamo
+        
+        $$
+        \tilde P(w\mid h) \;=\; \sum_{m=1}^{M} \lambda_m\, P_m(w\mid h),\qquad \lambda_m\ge 0,\; \sum_{m=1}^M \lambda_m=1
+        $$
+        
+        con $P_m$ stime (MLE o smussate) a diversi ordini o da diversi domini. L'obiettivo è scegliere $\lambda$ per massimizzare la log-likelihood su un \textit{dev set} $\mathcal{D}=\{(h_i,w_i)\}_{i=1}^N$:
+        
+        $$
+        \mathcal{L}(\lambda) \;=\; \sum_{i=1}^{N} \log \tilde P(w_i\mid h_i)
+        \;=\; \sum_{i=1}^{N} \log \Big( \sum_{m=1}^{M} \lambda_m\, P_m(w_i\mid h_i) \Big).
+        $$
+        
+        Questa è la \textbf{linear interpolation (Jelinek--Mercer)} con pesi \textit{globali}. Estensioni \textit{context-dependent} sostituiscono $\lambda_m$ con $\lambda_m(h)$, vincolati a sommare a $1$ per ogni $h$.
+
+        \subsubsection{Linear Interpolation}
+        
+            Il modello interpolato è una \textit{mistura} in cui, per ogni istanza $(h_i,w_i)$, una componente latente $z_i\in\{1,\dots,M\}$ ``sceglie'' quale modello $P_m$ ha generato $w_i$. Introdurre $z_i$ consente di massimizzare $\mathcal{L}(\lambda)$ con \textbf{Expectation-Maximization (EM)} sotto il vincolo $\sum_m \lambda_m=1$.
+            
+            
+            \paragraph{\textit{E-step}.} Calcoliamo le responsabilità (posteriori) di ciascuna componente sul dato $i$:
+            
+            $$
+            \gamma_i(m) \;=\; P(z_i{=}m\mid h_i,w_i)
+            \;=\; \frac{\lambda_m\, P_m(w_i\mid h_i)}{\sum_{j=1}^{M} \lambda_j\, P_j(w_i\mid h_i)}
+            $$
+            
+            \paragraph{\textit{M-step}.} Aggiorniamo i pesi come frazioni attese di assegnazioni, con normalizzazione:
+    
+            $$
+            \lambda_m^{\text{new}} \;=\; \frac{1}{N} \sum_{i=1}^{N} \gamma_i(m),
+            \qquad \text{(e quindi }\sum_m \lambda_m^{\text{new}}=1\text{)}
+            $$
+            
+            Questi passi aumentano monotonamente $\mathcal{L}(\lambda)$ e convergono a un ottimo locale. Per evitare degenerazioni quando alcune $P_m(w\mid h)$ sono mai nulle, si usa smoothing nelle $P_m$ o un piccolo termine di \textit{flooring}. L’algoritmo EM nasce in contesti di \textit{mixture models}. Nel classico \textbf{Gaussian Mixture Model} (GMM) su vettori $x_i\in\mathbb{R}^d$ con $M$ componenti, il modello è
+            
+            $$
+            P(x_i) \;=\; \sum_{m=1}^{M} \pi_m\, \mathcal{N}\big(x_i\,;\,\mu_m,\,\Sigma_m\big),\qquad \sum_m \pi_m=1
+            $$
+            
+            L’EM alterna: 
+            \paragraph{\textit{E-step}.}
+            
+            $$\gamma_i(m)=\frac{\pi_m\,\mathcal{N}(x_i;\mu_m,\Sigma_m)}{\sum_j \pi_j\,\mathcal{N}(x_i;\mu_j,\Sigma_j)}$$
+            
+            \paragraph{\textit{M-step}.}
+            
+            \begin{gather} 
+                \notag\pi_m\leftarrow\frac{1}{N}\sum_i\gamma_i(m),\qquad \mu_m\leftarrow \frac{\sum_i \gamma_i(m)x_i}{\sum_i \gamma_i(m)},\\
+                \notag\Sigma_m\leftarrow \frac{\sum_i \gamma_i(m)(x_i-\mu_m)(x_i-\mu_m)^\top}{\sum_i \gamma_i(m)}
+            \end{gather}
+            
+            Nel nostro caso, le componenti non sono Gaussiane ma \textit{discrete} $P_m(w\mid h)$; tuttavia la struttura dell’EM e identica e fornisce un criterio principled per impostare i pesi $\lambda$.
+
+        \newpage
+
+        \subsubsection{Kneser--Ney Interpolation}
+        
+            L'interpolazione di \textbf{Kneser--Ney (KN)} è uno smoothing allo stato dell'arte per $n$-grammi. Combina \textit{discount assoluto} sul livello alto con una \textbf{distribuzione di backoff} specializzata che misura la \textit{diversità dei contesti} di una parola, non solo la sua frequenza grezza. Questo migliora drasticamente le code (parole comuni come continuazioni "generiche" ma non come inizi di nuove collocazioni).\\
+            
+            Per un contesto $h$ e parola $w$, lo \textbf{bigram KN} è:
+            
+            $$
+            P_{\text{KN}}(w\mid h) \;=\; \frac{\max\big(c(h,w)-D,\,0\big)}{c(h)} \;+
+            \lambda(h)\,P_{\text{cont}}(w)
+            $$
+            
+            con $D\in(0,1)$ sconto assoluto e
+            
+            $$
+            \lambda(h) \;=\; \frac{D\, N_{1+}(h\,\ast)}{c(h)},\qquad
+            P_{\text{cont}}(w) \;=\; \frac{N_{1+}(\ast\,w)}{N_{1+}(\ast\,\ast)}.
+            $$
+            
+            Qui $N_{1+}(h\,\ast)$ è il numero di tipi distinti che seguono $h$ almeno una volta; $N_{1+}(\ast\,w)$ è il numero di contesti distinti che precedono $w$; $N_{1+}(\ast\,\ast)$ è il numero totale di bigrammi distinti osservati. L'idea è che la probabilità di backoff non è l'unigramma $\hat P(w)=c(w)/\sum_{w'}c(w')$, bensì la \textit{probabilità di continuazione} $P_{\text{cont}}(w)$: parole che appaiono in molti contesti diversi ottengono più massa.\\
+            
+            Per \textbf{trigrammi} si interpola ricorsivamente con il KN del livello inferiore:
+
+            $$
+            P_{\text{KN}}(w\mid u,v) \;=\; \frac{\max\big(c(uv\!,w)-D,0\big)}{c(uv)} \;+
+            \lambda(uv)\,P_{\text{KN}}(w\mid v)
+            $$
+            
+            con $\lambda(uv)=\dfrac{D\,N_{1+}(uv\,\ast)}{c(uv)}$ e il termine di backoff $P_{\text{KN}}(w\mid v)$ definito a sua volta come nel bigram KN. \underline{Per ordini superiori si procede allo stesso modo}.\\
+            
+            Lo \textbf{Modified Kneser--Ney} usa sconti diversi a seconda del conteggio di cella: $D_1$ per $c=1$, $D_2$ per $c=2$, $D_{3+}$ per $c\ge 3$. La forma trigramma diventa
+            $$
+            P_{\text{MKN}}(w\mid u,v) \;=\; \frac{\max\big(c(uv\!,w)-D(c(uv\!,w)),0\big)}{c(uv)} \;+
+            \lambda(uv)\,P_{\text{MKN}}(w\mid v)
+            $$
+            
+            con
+
+            $$
+            \lambda(uv) \;=\; \frac{D_1\,N_1(uv\!,\ast) + D_2\,N_2(uv\!,\ast) + D_{3+}\,N_{3+}(uv\!,\ast)}{c(uv)}
+            $$
+            
+            ove $N_r(uv\!,\ast)$ è il numero di tipi distinti che seguono $uv$ esattamente $r$ volte. Gli sconti si stimano dai \textit{conteggi di conteggi} $n_r$ (numero di $n$-gram che compaiono $r$ volte) su un dev set. Una stima comune (Chen\,\&\,Goodman) è:
+
+            $$
+            D_1 = 1 - \frac{2n_2}{n_1},\qquad D_2 = 2 - \frac{3n_3}{n_2},\qquad D_{3+} = 3 - \frac{4n_4}{n_3}
+            $$
+            
+            con clipping per garantire $D_r\in(0,1)$.\\
+            
+            La chiave di KN è il termine di backoff basato su \textit{diversità di contesti}. Parole molto frequenti ma collocate in pochi contesti (ad es. \textit{New} prima di \textit{York}) non ricevono troppa massa nel livello basso, mentre parole che possono continuare molti contesti diversi ricevono un prior più alto. Questo riduce \textit{over-allocation} a token frequentissimi e migliora la predizione delle continuazioni rare ma plausibili.\\
+            
+            Il fattore $\lambda(h)$ è scelto in modo che la probabilità totale sommata su $w$ sia $1$. Infatti, la massa scontata \,$\sum_{w:c(h,w)>0} \tfrac{D}{c(h)}\,=\,\tfrac{D\,N_{1+}(h\,\ast)}{c(h)}$\, viene interamente riallocata al modello di ordine inferiore tramite $\lambda(h)$, e $P_{\text{cont}}(\cdot)$ è già normalizzato per costruzione.
+
+        \subsubsection{Web-scale LMs}
+        
+            Su corpora web-scale (decine di miliardi di token) lo stoccaggio e l’inferenza con modelli normalizzati sono costosi. Lo \textbf{stupid backoff} sacrifica la normalizzazione per semplicità e velocità. Per i trigrammi:
+            
+            $$
+            S(w\mid h) \,=\, \begin{cases}
+            \dfrac{c(h,w)}{c(h)} & \text{se } c(h,w)>0,\\[8pt]
+            \gamma\, S(w\mid h') & \text{se } c(h,w)=0,
+            \end{cases}
+            $$
+            
+            con $0<\gamma<1$ (tipicamente $\gamma\approx 0.4$) e $S$ \textit{non} è una probabilità vera: non somma a $1$ su $w$. In ranking e decoding, tuttavia, confrontare i punteggi $S(\cdot\mid\cdot)$ è spesso sufficiente, e la mancanza di normalizzazione riduce enormemente costi di calcolo e implementazione. In pratica si combinano: conteggi massivi (MapReduce), pruning aggressivo degli $n$-grammi a basso conteggio, tries compressi e caching.\\
+            
+        \noindent In domini “ordinari” i modelli interpolati/backoff normalizzati (es. interpolated Kneser--Ney) tendono a fornire la migliore perplexity. Su scala web o in sistemi di ranking real-time, lo stupid backoff è competitivo perché riduce la latenza. In tutti i casi, i parametri ($\lambda$, sconti, $\gamma$) si selezionano su \textit{dev} minimizzando $H(W_{\text{dev}};P)=-\tfrac{1}{N}\sum_i\log \tilde P(w_i\mid\cdot)$ o massimizzando la metrica applicativa.
+    
+    

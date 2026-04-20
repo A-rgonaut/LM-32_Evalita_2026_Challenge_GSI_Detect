@@ -1,0 +1,109 @@
+\documentclass{article}
+%%%   Packages   %%%
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{framed,lipsum,xcolor}
+\usepackage{pgffor}
+\usepackage{wrapfig}
+\usepackage{float, graphicx}
+\usepackage{booktabs}
+\usepackage{authblk}
+\usepackage{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{fvextra}
+\usepackage{csquotes}
+\usepackage[T1]{fontenc} 
+\usepackage{algorithm}
+\usepackage{blindtext}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+\usepackage{minted}
+\usepackage[scaled]{beramono}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=1in]{geometry}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage[backend=biber, style=alphabetic, sorting=ynt]{biblatex}
+
+%%%   Settings   %%%
+\addbibresource{reference.bib}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{problem}{Problem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition} 
+% Aggiungere * dopo newtheorem per non averli enumerati
+
+\setlist[itemize]{leftmargin = 4mm}
+\setlist[enumerate]{leftmargin = 4mm}
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\newcommand{\blank}{\newpage\thispagestyle{empty}\mbox{}\newpage}
+
+\pagestyle{fancy}
+
+\fancypagestyle{firstpage}{
+    \fancyhead[L]{\includegraphics[height=1.8cm]{imgs/unipa.png}}
+    \fancyhead[R]{\includegraphics[height=1.5cm]{imgs/d_i.png}}
+}
+
+\fancyhead{} % clear all header fields
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\textbf{Natural Language Processing}}
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\textit{Andrea Spinelli}}
+\fancyfoot[R]{\thepage}
+
+\title{
+    \textbf{Natural Language Processing \\
+    \textit{\large II Year}}
+}
+
+\author[1]{ANDREA SPINELLI\\
+            \textit{andrea.spinelli@community.unipa.it}}
+\date{\textit{\today}}
+
+\affil[1]{\textit{Computer Science Engineering Department, Università degli Studi di Palermo, Italy}}
+
+\begin{document}
+
+    % Title
+    \maketitle
+    \thispagestyle{firstpage}
+
+    \vfill
+    
+    % Abstract
+    \begin{leftbar}
+        \begin{abstract}
+            \noindent 
+            Questo documento fornisce una sintesi strutturata dei fondamenti e delle architetture avanzate del Natural Language Processing (NLP). Il testo parte dall'elaborazione testuale di base (come tokenizzazione e normalizzazione) , per poi esplorare i modelli statistici a N-grammi e l'etichettatura di sequenze (POS tagging e NER) tramite algoritmi classici come HMM e CRF. Il nucleo centrale degli appunti è dedicato alla semantica vettoriale e all'evoluzione neurale: dalle reti RNN e LSTM fino alla rivoluzionaria architettura Transformer. Vengono analizzati nel dettaglio i Masked Language Models come BERT e i Large Language Models generativi (famiglia GPT, LLaMA, Mistral) , includendo tecniche di prompt engineering, model alignment e metriche di valutazione. Infine, il documento affronta i sistemi di Retrieval-Augmented Generation (RAG) per limitare le allucinazioni e arricchire i modelli con dati esterni.\\
+            \textbf{Nota importante:} \textit{Si precisa che i presenti appunti costituiscono esclusivamente uno strumento di supporto allo studio e non sostituiscono in alcun modo i materiali ufficiali, le dispense e i testi di riferimento previsti dal corso universitario.}
+        \end{abstract}
+    \end{leftbar}
+    
+    \noindent
+    \textbf{Keywords}: \textit{Natural Language Processing; Text Processing; N-grams; Sequence Labeling; Word Embeddings; Transformers; Large Language Models (LLM); Prompt Engineering; Model Alignment; Retrieval-Augmented Generation (RAG).}
+    
+    %%%   Table of Contents   %%%
+    \newpage
+    \tableofcontents
+    
+    %%%   Contents   %%%
+    \foreach \i in {1,...,12} {
+        \include{chapters/chapter_\i}
+    }
+    
+    %%%   Bibliography   %%%
+    %\newpage
+    
+    %\section{Bibliography}
+        %\printbibliography[heading=none]
+
+\end{document}

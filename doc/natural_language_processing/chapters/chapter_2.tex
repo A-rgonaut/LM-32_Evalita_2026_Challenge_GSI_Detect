@@ -1,0 +1,287 @@
+
+\blank
+\newpage
+
+\section{Text Processing}
+
+    Questa sezione introduce gli strumenti di base per preparare un corpus testuale: espressioni regolari, tokenizzazione (parole e frasi), normalizzazione e subword tokenization (BPE/WordPiece). Useremo la notazione per sequenze \(w_{1:n}\) e indicheremo con \(N\) il numero di token e con \(|V|\) la dimensione del vocabolario.
+    
+    \subsection{Regular Expressions}
+    
+        Le espressioni regolari (\textit{regex}) forniscono un linguaggio compatto per descrivere insiemi di stringhe. Sono essenziali per filtrare, validare e trasformare testo prima di applicare modelli statistici o neurali. Un uso tipico è intercettare varianti ortografiche e maiuscole, ad esempio \texttt{[Ww]oodchuck} cattura sia ``woodchuck'' sia ``Woodchuck''. 
+        
+        Gli operatori chiave includono classi di caratteri, disgiunzioni, quantificatori, ancoraggi e gruppi; le asserzioni di \emph{lookaround} vincolano il contesto senza consumare caratteri. Nella pratica bilanciamo \emph{precision} e \emph{recall}: pattern troppo larghi producono \textit{falsi positivi}, pattern troppo stretti producono \textit{falsi negativi}.
+        
+        \begin{table}[h]
+            \centering
+            
+            \begin{tabular}{@{}llll@{}}
+            
+                \toprule
+                
+                \textbf{Funzione} & \textbf{Sintassi} & \textbf{Descrizione} & \textbf{Esempio (match)} \\
+                
+                \midrule
+                
+                Classe di caratteri & \texttt{[A-Z]} & Una lettera maiuscola & \texttt{Regex} $\to$ \texttt{R} \\
+                
+                Classe negata & \texttt{[\^{}Ss]} & Qualsiasi tranne ``s/S'' & \texttt{bus} $\to$ \texttt{bu} (\emph{dipende dal motore}) \\
+               
+                Disgiunzione & \texttt{cat|dog} & ``cat'' oppure ``dog'' & \texttt{hotdog} $\to$ \texttt{dog} \\
+                
+                Quantificatore opz. & \texttt{x?} & 0 o 1 occorrenza di \texttt{x} & \texttt{colou?r} $\to$ \texttt{colour}, \texttt{color} \\
+                
+                Quantificatore \texttt{*} & \texttt{x*} & 0 o più occorrenze & \texttt{ba*} $\to$ \texttt{b}, \texttt{baaa} \\
+                
+                Quantificatore \texttt{+} & \texttt{x+} & 1 o più occorrenze & \texttt{ba+} $\to$ \texttt{baa} \\
+                
+                Intervallo & \texttt{x\{m,n\}} & Da $m$ a $n$ occorrenze & \texttt{a\{2,3\}} $\to$ \texttt{aa}, \texttt{aaa} \\
+                Ancoraggi & \texttt{\textasciicircum}, \texttt{\$} & 
+                
+                Inizio/fine riga & \texttt{\textasciicircum The} su ``The ...'' \\
+                
+                \bottomrule
+                
+            \end{tabular}
+
+            \caption{Matching}
+        \end{table}
+
+        ELIZA (Weizenbaum, 1966) dimostrò come semplici regole di pattern-matching e sostituzione possano simulare una conversazione nello stile rogersiano: pattern come .* I AM (depressed|sad) .* venivano riscritti in risposte riflessive (“WHY DO YOU THINK YOU ARE \textbackslash 1”). È un caso emblematico del ruolo delle regex/riscritture come baseline conversazionale.
+        
+        \begin{table}[h]
+            \centering
+            
+            \begin{tabular}{@{}llll@{}}
+            
+                \toprule
+                
+                \textbf{Funzione} & \textbf{Sintassi} & \textbf{Descrizione} & \textbf{Esempio (match)} \\
+                
+                \midrule
+                
+                Confine di parola & \texttt{\textbackslash b} & Bordo parola & \texttt{\textbackslash bdog\textbackslash b} $\to$ ``dog'' isolato \\
+                
+                Gruppo catturante & \texttt{(...)} & Raggruppa e memorizza & \texttt{(\textbackslash d+)-(\textbackslash d+)} su \texttt{12-34} \\
+                
+                Backreference & \texttt{\textbackslash 1, \textbackslash 2} & Richiama gruppi precedenti & \texttt{(\textbackslash w+)\ \textbackslash 1} $\to$ ``go go'' \\
+                
+                Gruppo non catturante & \texttt{(?:...)} & Raggruppa senza memorizzare & \texttt{(?:pre|re)fix} \\
+                
+                Lookahead positivo & \texttt{(?=...)} & Richiede contesto seguente & \texttt{\textbackslash w+(?=\textbackslash .)} su ``word.'' $\to$ \texttt{word} \\
+                
+                Lookahead negativo & \texttt{(?!...)} & Esclude contesto seguente & \texttt{Dog(?!s)} non matcha ``Dogs'' \\
+                
+                Lookbehind positivo & \texttt{(?<=...)} & Richiede contesto precedente & \texttt{(?<=EU)\textbackslash d+} su ``EU123'' $\to$ \texttt{123} \\
+                
+                Lookbehind negativo & \texttt{(?<!...)} & Esclude contesto precedente & \texttt{(?<!Mr\textbackslash .)\textbackslash b[A-Z]} evita abbr. \\
+                
+                Sostituzione & \texttt{s/pat/repl/} & Rimpiazza con \texttt{repl} & \texttt{s/(\textbackslash w+)s/\textbackslash 1/}:\ ``dogs'' $\to$ ``dog'' \\
+                
+                \bottomrule
+                
+            \end{tabular}
+
+            \caption{Sostituzioni, gruppi e lookaround}
+        \end{table}
+
+        \noindent\textbf{\textit{Nota}}: il supporto e le regole dei lookbehind variano tra i motori; alcuni richiedono ampiezza fissa.
+
+        \newpage
+    
+        \subsection{Words and Corpora}
+        
+            Nel testo distinguiamo token e type. Un \textbf{token} è un’istanza nel flusso testuale (ogni parola “che appare”), mentre un \textbf{type} è la forma distinta nel vocabolario. Se indichiamo con $N$ il numero di token osservati e con $|V|$ la dimensione del vocabolario, una stessa sequenza può essere ambigua: nella frase “they lay back on the San Francisco grass and looked at the stars and their” puoi contare $N=14$ o $15$ token a seconda di come tratti “San Francisco”, e i type possono variare se normalizzi maiuscole o multiword expressions (MWE).
+
+            \subsubsection{Wordform and Lemma}
+
+                Accanto a token e type servono due nozioni lessicali: \textbf{wordform} (la forma flessa in superficie, es. “cats”) e \textbf{lemma} (la radice lessicale, es. “cat”). “cat” e “cats” hanno lo stesso lemma ma wordform diverse; l’analisi a lemma è cruciale quando vuoi aggregare varianti flessive senza perdere il “significato-base”.
+    
+                Empiricamente, la \textbf{Legge di Heaps} (o di \textbf{Herdan}) modella la crescita del vocabolario all’aumentare del corpus:
+    
+                $$
+                    |V(N)| \approx K\,N^{\beta}, \qquad 0<\beta<1.
+                $$   
+        
+                In molti testi generali, $\beta$ è sublineare e spesso nell’intorno $0.67\text{–}0.75$: più leggi, più compaiono parole nuove, ma con un ritmo decrescente. Alcuni esempi di grandezze sono: 
+    
+                \begin{table}[h]
+                    \centering
+                    
+                    \begin{tabular}{lcc}
+                    
+                        \toprule
+                        
+                        & Tokens = N & Types = |V| \\
+                        
+                        \midrule
+                        
+                        Switchboard phone conversations & 2.4 million & 20 thousand \\
+                        Shakespeare & 884,000 & 31 thousand \\
+                        COCA & 440 million & 2 million \\
+                        Google N-grams & 1 trillion & 13+ million \\
+                        
+                        \bottomrule
+                    
+                    \end{tabular}
+                    
+                    \caption{Sample Data Sets with Tokens and Types}
+                    \label{tab:sample_data}
+                \end{table}
+                
+                Un fatto correlato è la \textbf{Legge di Zipf}, secondo cui la frequenza $f(r)$ della parola di rango $r$ (in una lista ordinata per frequenza) decresce approssimativamente come $f(r)\propto 1/r^{\alpha}$, spesso con $\alpha\approx 1$. Questo spiega perché poche parole funzionali dominano i conteggi e tante parole rare appaiono pochissimo.\\
+
+            \subsubsection{Corpora}
+
+                Un \textbf{corpus} non è “testo neutro”: \textit{è prodotto da autori specifici, in un certo tempo, varietà e lingua}, per una funzione comunicativa precisa. Per questo i corpora differiscono per lingua (incluse lingue con spazi vs. senza spazi), varietà (es. AAE), code-switching (esempi Spagnolo/English; Hindi/English), genere testuale (news, fiction, Wikipedia…), e demografie degli autori.\\
+    
+                In pratica si parla di corpora bilanciati (mirano a coprire più generi in modo controllato), di monitoraggio (crescono nel tempo, es. web/news), di dominio (settoriali: clinico, legale, social media) o di riferimento (usati come standard per compiti/valutazioni). Le scelte di campionamento e filtraggio impattano le statistiche di frequenza e la trasferibilità dei modelli.\\
+    
+                Oggi è buona prassi accompagnare un corpus con una datasheet che documenti motivazione, composizione, processo di raccolta, pre-processing, raccomandazioni d’uso e aspetti etici; questo migliora trasparenza, riproducibilità e governance del rischio.\\
+                Quando servono etichette (POS, NER, sentiment…), l’annotazione va pianificata: linee guida chiare, più annotatori, misura dell’accordo e gestione dei bias culturali/linguistici.
+
+        \newpage
+        
+        \subsection{Words Tokenization}
+        
+            Dato un testo grezzo $x_{1:T}$ (una sequenza di caratteri Unicode), la tokenizzazione in parole è la funzione che produce una sequenza di token $w_{1:n}$ e una partizione per indici di confine $1=b_1<\dots<b_{n+1}=T+1$ tale che ogni token è $w_i = x_{b_i:(b_{i+1}-1)}$. In pratica stiamo decidendo dove spezzare (i soli “spazi” non bastano!). Questa decisione non è universale: dipende dalla lingua, dal dominio e dal task (IR, NER, traduzione, QA).
+
+            Alcuni esempi sono:
+            
+            \begin{itemize}
+                
+                \item \textbf{Punteggiatura e simboli}: I segni possono essere separati o aggregati al token: “ciao!” → “ciao” + “!” oppure “ciao!”. La scelta va stabilita a priori e tenuta coerente, specie per POS/NER.
+                
+                \item \textbf{Numeri e separatori locali}: In italiano il decimale usa la virgola: “3,14”. Il punto può essere separatore delle migliaia: “1.234,56”. In inglese è spesso l’opposto.
+                
+                \item \textbf{Contrazioni, elisioni e clitici}: In inglese “we’re” può diventare “we” + “’re” (utile per POS). In italiano hai elisioni e clitici attaccati: “l’ho”, “dell’acqua”, “portarglielo”.
+                
+                \item \textbf{Multiword expressions (MWE)}: “San Francisco”, “New York”, “a lungo termine”, “stati uniti d’america”: per molti task è utile trattarle come un unico token logico (es. San\_Francisco).
+                
+                \item \textbf{URL, hashtag, @mention, email, emoji}:  Spesso conviene tokenizzarli come unità atomiche (un singolo token) per non distruggere struttura e semantica.
+                
+                \item \textbf{Lingue senza spazi o con script complessi}: In cinese, giapponese o thai non ci sono spazi tra parole; la tokenizzazione diventa un problema di segmentazione a sé, spesso trattato come etichettatura di confine (BIO) con CRF o modelli neurali. In alternativa si lavora a caratteri o subword.
+                
+            \end{itemize}
+
+            In un pipeline moderno conviene sempre distinguere: (i) \textbf{normalizzazione di base} (Unicode NFC/NFKC, spazi multipli, rimozione di caratteri di controllo), (ii) \textbf{tokenizzazione in parole}, (iii) \textbf{eventualmente subword} (BPE/WordPiece)
+        
+        \subsubsection{Byte Pair Encoding}
+        
+            Per modelli neurali e vocabolari aperti, la tokenizzazione a subword riduce gli OOV e cattura morfemi ricorrenti con un vocabolario finito. L’idea di \textbf{Byte Pair Encoding (BPE)} è imparare un inventario di “pezzi” di parola (subword) a partire da un corpus, fondendo iterativamente le coppie di simboli adiacenti più frequenti. All’inizio ogni parola è spezzata in caratteri più un marcatore di fine-parola (ad es. “\_” o $\langle/\!w\rangle$). Fondendo le coppie più frequenti, si formano unità utili come radici e suffissi, riducendo gli $OOV$ senza dover usare un vocabolario di parola enorme.\\
+
+            Supposto di avere un lessico di parole con frequenze $\{(w^{(i)}, c^{(i)})\}{i=1}^M$. \textit{Ogni parola è rappresentata come sequenza di simboli iniziali a livello carattere}, p.es. “casa” $\mapsto$ $[\text{c},\text{a},\text{s},\text{a},\ ]$. Definiamo $V_0$ l’alfabeto iniziale (caratteri + marcatore di fine-parola). Ad ogni passo $t$:
+
+            \begin{enumerate}
+            
+                \item Contiamo, pesati per frequenza, le coppie adiacenti di simboli in tutto il lessico.
+                
+                \item Scegliamo la coppia più frequente $\big( x,y\big)$ ed eseguiamo la fusione in un nuovo simbolo $z=xy$.
+                
+                \item Sostituiamo tutte le occorrenze di $x,y$ adiacenti con $z$ e aggiorniamo l’inventario: $V_{t+1}=V_t\cup\{z\}$.
+                
+                \item Ripetiamo finché raggiungiamo la taglia di vocabolario desiderata $|V_T|$ (o un numero di fusioni $T$). Il risultato dell’addestramento sono l’inventario $V_T$ e soprattutto l’ordine delle fusioni $\mathcal{M}=[(x_1,y_1),\dots,(x_T,y_T)]$, che definisce come segmentare in test.
+                
+            \end{enumerate}
+
+            Dato un token di input $w$, lo si spezza in caratteri più marcatore e si applicano le fusioni nell’ordine imparato. Ogni volta che una coppia presente in $\mathcal{M}$ è adiacente nella sequenza corrente, la si fonde; si procede dall’inizio alla fine della lista di fusioni, fino a quando non si possono fare altre fusioni. Questo processo è deterministico dato l’ordine dei merge.
+
+            In pratica, dopo molte fusioni, parole molto frequenti rimangono intere come singoli token; parole meno frequenti diventano concatenazioni di subword comuni (radice + suffissi).
+
+            \paragraph{Ex.\\}
+            Immaginiamo un lessico con frequenze: “casa”, “case”, “casetta”, “casette”. Dopo poche fusioni probabili:
+
+            \begin{center}
+                “c”+“a” $\to$ “ca”, “s”+“a” $\to$ “sa”, “t”+“t” $\to$ “tt”, “e”+“ ” $\to$ “**e**”
+            \end{center}
+            
+            Emergeranno subword come “cas”, “etta”, “ette”, e token completi come “casa\_” se molto frequente.
+            Così “casetta” può segmentarsi in “cas + etta + \_”, mentre “case” diventa “cas + e\_”. 
+            
+            Per l’italiano è comune che BPE catturi morfemi produttivi come “-zione”, “-mente”, “-ismo”, “-are/-ere/-ire”, “-iamo”, “-ato/-ito”, migliorando la generalizzazione.\\
+            
+            Il \textbf{marcatore di fine-parola} (ad es. “” o $\langle/\!w\rangle$) impedisce fusioni che attraversano i confini di parola e consente di distinguere “est” come parola (con “**est”) dal suffisso “-est**” dentro “new + est”. Senza questo segnale, le fusioni rischiano di unire pezzi indesiderati attraversando spazi.
+
+            \paragraph{Snippet: BPE}
+            \begin{minted}[linenos]{python}
+from collections import Counter
+
+# Corpus di esempio: parole separate da spazi e simbolo _ per il fine-parola
+corpus = ["low _", "lower _", "newest _", "widest _"]
+# Rappresentiamo ogni parola come lista di caratteri (o subword iniziali)
+words = [list(w.replace(" ", "")) for w in corpus]
+# Esempio: "lowest _" -> ["l","o","w","e","s","t","_"]
+
+def get_stats(words):
+    pairs = Counter()
+    for w in words:
+        for i in range(len(w)-1):
+            pairs[(w[i], w[i+1])] += 1
+    return pairs
+
+def merge_pair(words, pair):
+    a, b = pair
+    merged = []
+    for w in words:
+        i = 0
+        new_w = []
+        while i < len(w):
+            if i < len(w)-1 and w[i] == a and w[i+1] == b:
+                new_w.append(a+b)  # fusione
+                i += 2
+            else:
+                new_w.append(w[i])
+                i += 1
+        merged.append(new_w)
+    return merged
+
+# Applichiamo poche fusioni
+for _ in range(10):
+    stats = get_stats(words)
+    if not stats:
+        break
+    best = max(stats, key=stats.get)
+    words = merge_pair(words, best)
+
+print("Vocabolario subword appreso:", sorted({s for w in words for s in w}))
+            \end{minted}
+        
+        \subsubsection{Words Normalization}
+        
+            La normalizzazione porta le wordform a una rappresentazione standard prima dell'analisi. Si pensi ad esempio una trasformazione deterministica applicata ai token o all'intero testo: data una stringa Unicode $w$, otteniamo la forma normalizzata $\mathcal{N}(w)$. Due forme sono considerate equivalenti se condividono la stessa normale, cio\`e $w \sim w'$ se e solo se $\mathcal{N}(w)=\mathcal{N}(w')$. In generale, il vocabolario collassa: se $V$ \`e l'insieme dei type e $V_{\mathcal{N}}=\{\mathcal{N}(w): w\in V\}$, allora $|V_{\mathcal{N}}| \le |V|$.\\
+            
+            Scriviamo la normalizzazione come composizione di passi pi\`u semplici: $\mathcal{N} = \mathcal{N}_k \circ \cdots \circ \mathcal{N}_1$. Conviene che sia \emph{deterministica} e \emph{idempotente}, ossia $\mathcal{N}(\mathcal{N}(w)) = \mathcal{N}(w)$, in modo che il risultato non dipenda da quante volte applichiamo la procedura. Se $c(w)$ \`e la frequenza della wordform $w$ e $c_{\mathcal{N}}(u)$ la frequenza della forma normalizzata $u$, allora $c_{\mathcal{N}}(u) = \sum_{w:\ \mathcal{N}(w)=u} c(w)$.\\
+
+            La normalizzazione include:
+
+            \begin{itemize}
+            
+                \item \textbf{Case Folding}: Una trasformazione che riduce le varianti di maiuscole/minuscole a una forma canonica, così da unificare conteggi e diminuire la sparsità. Formalmente è una funzione $\mathcal{C}:\Sigma^*\to\Sigma^*$ tale che, per ogni token $w$, la forma ridotta è $\mathcal{C}(w)$. La versione più comune è il lowercasing completo, che scriviamo come
+
+                $$
+                C_{lower}(w)=lowercase(w)
+                $$
+            
+                \item \textbf{Lemmatization}: Mappa una wordform alla sua voce di dizionario (il lemma) usando conoscenza morfologica e, di norma, l’informazione sul part-of-speech (POS) e sulle feature flessive (ad es. ``am'', ``are'', ``is'' $\to$ ``be''). Possiamo vederla come una funzione condizionata:
+
+                $$
+                \mathcal{L}:(w,\text{pos},\text{morph}) \mapsto \ell
+                $$
+            
+                \item \textbf{Stemming}: Applica regole di riscrittura per troncare suffissi e talvolta prefissi senza garantire un lemma valido. Si può formalizzare come una funzione non contestuale
+
+                $$
+                \mathcal{S}:w \mapsto s
+                $$
+
+                definita da un insieme ordinato di regole $r_1,\dots,r_k$ che riscrivono stringhe di coda (o testa). A differenza di $\mathcal{L}$, $\mathcal{S}$ non usa POS né morfologia; per questo è più veloce e robusto su testi rumorosi, ma può introdurre due tipi di errore: overstemming (parole semanticamente distinte convergono allo stesso stem) e understemming (varianti morfologiche restano separate).
+            
+                \item \textbf{Sentence Segmentation}: Individua i confini tra enunciati in un testo continuo. Partiamo da una sequenza di caratteri $x_{1:T}$ e vogliamo stimare una sequenza di indici $1=s_1<s_2<\dots<s_{m+1}=T+1$ tali che la $j$-esima frase sia $x_{s_j:(s_{j+1}-1)}$. Gli stessi simboli che usiamo come indizi di fine frase (“.”, “?”, “!”) sono ambigui perché compaiono nelle abbreviazioni, nei numeri e nelle sigle. Questo rende il problema un caso tipico di disambiguazione di confine.
+            
+                \item \textbf{Stopwords Removal}: Parole molto frequenti e poco discriminative in certi compiti (articoli, preposizioni, congiunzioni, ausiliari). L’idea classica è filtrarle prima dell’analisi per ridurre rumore e dimensionalità. Possiamo vederlo come un operatore di filtro che, dato l’insieme dei token del documento $d$, rimuove quelli presenti in una lista $S$: se $w\in S$, allora $w$ non compare nella rappresentazione finale.
+            
+            \end{itemize}
+            
+            
+            
+    

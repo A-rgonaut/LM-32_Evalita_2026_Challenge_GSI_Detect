@@ -1,0 +1,76 @@
+
+\newpage
+
+\section{Prompting}
+
+    Il \textit{prompt} è l'istruzione fornita in input a un Large Language Model (LLM). La stringa immessa viene elaborata dal modello, che genera iterativamente nuovi token condizionati dal contesto creato dal prompt stesso, al fine di raggiungere l'obiettivo dell'utente. Il processo di ricerca e ottimizzazione di prompt efficaci per specifici task è noto come \textit{Prompt Engineering}.
+
+    Per evitare di scrivere un nuovo prompt per ogni singola interrogazione, si utilizzano i \textit{Template}. Essi garantiscono scalabilità e devono essere progettati in modo non ambiguo. Il flusso di utilizzo prevede:
+    \begin{enumerate}
+        \item Sviluppo di un template specifico per il task con un parametro libero per l'input testuale.
+        \item Istanziazione del prompt compilato inserendo l'input nel template.
+        \item Decodifica autoregressiva da parte del LLM per generare i token di output.
+        \item Estrazione della risposta desiderata dall'output del modello.
+    \end{enumerate}
+
+    \paragraph{Few-shot Prompting}
+
+        Per migliorare le prestazioni del modello, è possibile includere nel prompt alcuni esempi etichettati del task (dimostrazioni), tecnica nota come \textit{few-shot prompting}. Al contrario, lo \textit{zero-shot prompting} non prevede alcun esempio.
+        Gli esempi devono essere pochi; il maggior guadagno in termini di performance si ottiene solitamente dal primo esempio inserito, mentre per i successivi l'incremento diminuisce. Gli esempi possono essere selezionati:
+        
+        \begin{itemize}
+            \item \textbf{Automaticamente}: selezionando nel training set gli esempi con gli embedding più simili a quello corrente.
+            \item \textbf{Programmaticamente}: sfruttando una metrica di performance del task per massimizzare il risultato.
+        \end{itemize}
+
+    \subsection{In-Context Learning e Induction Head}
+
+        La capacità di un LLM generativo di apprendere dal contesto fornito nel prompt e migliorare la previsione dei token è definita \textit{in-context learning} . 
+
+        Il funzionamento di questo meccanismo si basa sull'ipotesi delle \textit{induction head}. Si tratta di particolari \textit{attention head} che riconoscono pattern ripetitivi del tipo $\{A,B,...,A\}\rightarrow B$. Il meccanismo prevede due fasi:
+        \begin{itemize}
+            \item \textbf{Previous token head}: copia il token precedente nel \textit{residual stream} del token attuale .
+            \item \textbf{Match-and-copy}: l'induction head cerca una corrispondenza tra una \textit{query} derivata dal token corrente e una \textit{key} generata dall'output della \textit{token head} precedente, spostando il valore (Value) nell'output .
+        \end{itemize}
+
+    \subsection{Model Alignment}
+
+        A causa della loro natura autoregressiva, i modelli pre-addestrati possono ignorare il condizionamento del prompt e generare testi dannosi, tossici o falsi . Il \textit{Model Alignment} comprende i metodi atti ad adattare l'LLM alle esigenze umane. Esistono due strategie principali: \textit{Instruction Tuning} e \textit{Preference Alignment} .
+
+        \subsubsection{Instruction Tuning (SFT)}
+
+            L'Instruction Tuning (o Supervised Fine Tuning - SFT) consiste nell'effettuare un fine-tuning del modello pre-addestrato su un corpus di istruzioni e relative risposte. Questo approccio attiva una forma di \textit{meta-learning}: il modello non impara solo i singoli task, ma migliora globalmente la sua capacità di seguire istruzioni.
+
+            I dati per il training possono provenire da dataset curati manualmente (molto dispendiosi) oppure possono essere generati in automatico trasformando task classici tramite template o chiedendo a un LLM di generare e parafrasare istruzioni partendo da linee guida umane. La valutazione di questi modelli avviene solitamente tramite un approccio \textit{Leave-one-out}, rimuovendo un intero cluster di task dal corpus di addestramento per usarlo solo in fase di test.
+
+    \subsection{Tecniche Avanzate di Prompting}
+
+        \subsubsection{Chain-of-Thought (CoT)}
+        
+            Il \textit{Chain-of-Thought prompting} migliora le prestazioni su task di ragionamento complessi. L'idea è indurre il modello a suddividere il problema in passaggi logici intermedi (step by step), proprio come farebbe un essere umano. Nel few-shot prompting con CoT, le dimostrazioni includono esplicitamente il testo che spiega il ragionamento.
+
+        \subsubsection{Automatic Prompt Optimization (APO)}
+
+            L'APO è una tecnica che cerca automaticamente i prompt più performanti eseguendo una ricerca iterativa nello spazio dei prompt. Un algoritmo di ricerca necessita di:
+            
+            \begin{enumerate}
+                \item \textbf{Stato iniziale}: prompt di partenza.
+                \item \textbf{Metrica di scoring}: valutazione delle performance mescolando prompt e campioni del training set (spesso usando algoritmi come la \textit{Beam Search}).
+                \item \textbf{Metodo di espansione}: generazione di varianti del prompt, solitamente chiedendo a un LLM di effettuare una parafrasi .
+            \end{enumerate}
+            
+            Esiste anche la \textit{Informed Search}, in cui si chiede a un LLM di criticare un prompt sulla base degli esempi in cui ha fallito, generando poi una versione migliorata .
+
+    \subsection{Preference Alignment: RLHF e DPO}
+
+        \subsubsection{Reinforcement Learning with Human Feedback (RLHF)}
+        
+            L'RLHF sfrutta il feedback umano per addestrare un modello di reward (\textit{Reward Model}), basato su come gli addestratori umani classificano le risposte dell'LLM . Questo reward model guida poi un algoritmo di reinforcement learning per ottimizzare i pesi del modello principale. 
+
+            Il motore di ottimizzazione tipico è il \textbf{Proximal Policy Optimization (PPO)}. PPO usa la \textit{gradient ascent} con una funzione di clipping per evitare che la nuova policy diverga eccessivamente dalla precedente, garantendo stabilità e controllo. È ideale per task complessi che richiedono pianificazione a lungo termine e sviluppo su larga scala.
+
+        \subsubsection{Direct Preference Optimization (DPO)}
+        
+            Il DPO è un approccio alternativo che ottimizza direttamente i parametri del modello sulle preferenze umane, bypassando la creazione del modello di reward e riducendo la complessità di calcolo e di tuning degli iperparametri . Funziona raccogliendo dataset con rating o comparazioni binarie, sviluppando una \textit{loss function} che calcola la discrepanza tra gli output generati e le preferenze umane e aggiornando i parametri.
+            
+            Il DPO risulta essere più leggero e adattabile rapidamente ai feedback, adatto per task semplici o contesti con risorse limitate.
